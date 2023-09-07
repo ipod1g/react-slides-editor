@@ -1,0 +1,35 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+html,
+body,
+#root {
+  height: 100vh;
+  width: 100vw;
+}
+
+/* for rnd  */
+.resize-content img {
+  user-drag: none;
+  user-select: none;
+  -moz-user-select: none;
+  -webkit-user-drag: none;
+  -webkit-user-select: none;
+  -ms-user-select: none;
+}
+
+.resize-content *:hover ~ .resize-handle-wrapper,
+.resize-content *:focus ~ .resize-handle-wrapper {
+  opacity: 1;
+}
+
+.resize-handle-wrapper:hover,
+.resize-handle-wrapper:focus {
+  opacity: 1;
+}
+
+.resize-handle-wrapper {
+  opacity: 0;
+}
+/* for rnd  */

@@ -82,7 +82,7 @@ const QuillToolbar = ({
                     onClick={() => {
                       addText(currentSlide, 'Enter Text');
                     }}
-                    className="hover:bg-accent-light/50 text-primary-white mr-3"
+                    className="hover:bg-accent-light/50 text-accent-dark mr-3"
                   >
                     <MdTextIncrease size={24} />
                   </button>
@@ -97,7 +97,7 @@ const QuillToolbar = ({
               <TooltipProvider delayDuration={200}>
                 <Tooltip>
                   <TooltipTrigger asChild>
-                    <PopoverTrigger className="hover:bg-accent-light/50 text-primary-white">
+                    <PopoverTrigger className="hover:bg-accent-light/50 text-accent-dark">
                       <FaRegImage size={20} />
                     </PopoverTrigger>
                   </TooltipTrigger>

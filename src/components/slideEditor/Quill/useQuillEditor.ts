@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useRef } from 'react';
 
 import { QuillInstance } from '@/types';
+import Quill from 'quill';
 
 const useQuillEditor = (
   quillEditorContainer: React.RefObject<HTMLDivElement>,
@@ -12,7 +13,7 @@ const useQuillEditor = (
     if (quillInstance.current) return console.log('quill already initialized');
     if (typeof window !== 'undefined') {
       // eslint-disable-next-line @typescript-eslint/no-var-requires
-      const Quill = require('quill');
+      // Quill = require('quill');
 
       if (quillEditorContainer.current) {
         quillInstance.current = new Quill(quillEditorContainer.current, {
@@ -20,7 +21,7 @@ const useQuillEditor = (
           modules: {
             toolbar: quillToolbarContainer.current,
           },
-        });
+        }) as QuillInstance;
         quillInstance.current
           ?.getModule('toolbar')
           .addHandler('image', () => {});

@@ -1,5 +1,5 @@
 import Quill, {
-  QuillOptionsStatic,
+  // QuillOptionsStatic,
   ClipboardStatic,
   History,
   KeyboardStatic,
@@ -8,7 +8,7 @@ import Quill, {
 export interface QuillInstance extends Quill {
   clipboard: ClipboardStatic;
   container: Element & { innerHTML: string };
-  options: QuillOptionsStatic;
+  // options: QuillOptionsStatic;
   root: HTMLDivElement;
   keyboard: KeyboardStatic;
   history: History;

@@ -1,9 +1,8 @@
-import React, { useCallback, useEffect, useState } from 'react';
-import debounce from 'lodash';
+import React, { useCallback, useEffect } from 'react';
+import { debounce } from 'lodash';
 
 import useSlidesStore, {
   TextItem,
-  ImageItem,
   useSlidesActions,
 } from '@/components/slideEditor/store';
 
@@ -14,10 +13,7 @@ import {
 } from '@/components/slideEditor/functions';
 import { SLIDE_THUMBNAIL_SCALE } from '@/components/slideEditor/config';
 
-import RichTextBox from '@/components/slideEditor/Item/RichTextBox';
-import Resizeable from '@/components/slideEditor/Item/Resizeable';
-import ItemContextMenu from '@/components/slideEditor/Item/ItemContextMenu';
-import ItemControl from '@/components/slideEditor/Item/ItemControl';
+import Item from '@/components/slideEditor/Item/';
 
 interface SlideProps {
   currentSlideIndex: number;
@@ -38,45 +34,17 @@ const Slide = React.memo(
     const { updateText, selectItem } = useSlidesActions();
     const selectedItem = useSlidesStore((state) => state.selectedItem);
     const slideScale = useSlidesStore((state) => state.slideScale);
-    const slide = useSlidesStore((state) => state.slides[currentSlideIndex]);
-
-    const [memoizedItems, setMemoizedItems] = useState<
-      Array<TextItem | ImageItem>
-    >([]);
-
-    useEffect(() => {
-      if (!slide?.items) return;
-      if (memoizedItems.length != slide.items.length) {
-        return setMemoizedItems(slide.items);
+    const slide = useSlidesStore(
+      (state) => state.slides[currentSlideIndex],
+      // if false, rerenders
+      (prev, next) => {
+        // nothing changed
+        if (JSON.stringify(prev) === JSON.stringify(next)) return true;
+        return false;
       }
+    );
 
-      if (JSON.stringify(slide.items) === JSON.stringify(memoizedItems)) return;
-      for (let i = 0; i < slide.items.length; i++) {
-        const textItem = slide.items[i] as TextItem;
-        const memoizedTextItem = memoizedItems[i] as TextItem;
-
-        // recognize order change and update memoizedItems
-        setMemoizedItems((prevItems) =>
-          prevItems.map((item, index) => {
-            return index !== i ? item : slide.items[i];
-          })
-        );
-
-        if (slide.items[i].type !== 'text') continue;
-        if (textItem.content !== memoizedTextItem.content) {
-          // recognize text change and update memoizedItems
-          setMemoizedItems((prevItems) =>
-            prevItems.map((item, index) => {
-              return index !== i
-                ? item
-                : { ...item, content: textItem.content };
-            })
-          );
-          return;
-        }
-      }
-    }, [slide, memoizedItems]);
-
+    /** Listens to quill api */
     useEffect(() => {
       if (quillInstance.current && selectedItem) {
         const quill = quillInstance.current || {};
@@ -108,7 +76,7 @@ const Slide = React.memo(
 
         if (activate && quill && editable?.content) {
           const content = stripEscapeDoubleQuotes(JSON.parse(editable.content));
-          // @ts-expect-error quill typings
+          // @ts-expect-error quill typings on content
           const delta = quill.clipboard.convert(content);
           quill.setContents(delta, 'silent');
 
@@ -149,7 +117,7 @@ const Slide = React.memo(
           style={{
             scale: isThumbnail ? SLIDE_THUMBNAIL_SCALE : slideScale,
           }}
-          className="h-[900px] w-[1600px] flex-shrink-0 bg-white overflow-clip"
+          className="h-[900px] w-[1600px] absolute flex-shrink-0 bg-white overflow-clip"
         >
           <div
             id="buffer-area-inner"
@@ -161,10 +129,10 @@ const Slide = React.memo(
             }}
             className="w-full h-full absolute"
           />
-          {memoizedItems.map((item, idx) => (
-            <MItem
+          {slide?.items.map((item, idx) => (
+            <Item
               isThumbnail={isThumbnail}
-              key={'item-' + item.id + idx}
+              key={'item-' + item.id}
               item={item}
               idx={idx}
               setEditableActiveStatus={setEditableActiveStatus}
@@ -179,67 +147,3 @@ const Slide = React.memo(
 );
 
 export default Slide;
-
-const MItem = React.memo(
-  ({
-    item,
-    idx,
-    setEditableActiveStatus,
-    quillEditorContainer,
-    selectedItem,
-    isThumbnail,
-  }: {
-    item: TextItem | ImageItem;
-    idx: number;
-    setEditableActiveStatus: (
-      editable: TextItem | undefined,
-      activate: boolean
-    ) => void;
-    quillEditorContainer: React.RefObject<HTMLDivElement>;
-    selectedItem: TextItem | ImageItem | undefined;
-    isThumbnail?: boolean;
-  }) => {
-    // console.log(idx, item);
-
-    return (
-      <React.Fragment key={'item-' + item.id}>
-        {item.type === 'text' ? (
-          <Resizeable
-            item={item}
-            isThumbnail={isThumbnail}
-            idx={idx}
-            isActive={selectedItem?.id === item.id}
-          >
-            <ItemContextMenu>
-              <ItemControl itemId={item.id} />
-              <RichTextBox
-                isThumbnail={isThumbnail}
-                editable={item}
-                onChangeActive={setEditableActiveStatus}
-                quillEditorContainer={quillEditorContainer}
-                isActive={selectedItem?.id === item.id}
-              />
-            </ItemContextMenu>
-          </Resizeable>
-        ) : (
-          <Resizeable
-            item={item}
-            isThumbnail={isThumbnail}
-            idx={idx}
-            // lockAspectRatio
-          >
-            <ItemContextMenu>
-              <ItemControl itemId={item.id} />
-              <img
-                id={item.id}
-                src={item.url}
-                alt={`image-${item.id}`}
-                className="h-full w-full object-fill"
-              />
-            </ItemContextMenu>
-          </Resizeable>
-        )}
-      </React.Fragment>
-    );
-  }
-);

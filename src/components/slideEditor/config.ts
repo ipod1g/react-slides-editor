@@ -5,6 +5,9 @@ export const AUTOSAVE_INTERVAL_MS = 60000; // 1 minute
 export const MIN_RESIZE_HEIGHT = 30;
 export const MIN_RESIZE_WIDTH = 120;
 
+export const RESIZE_GRID_SNAP: [number, number] = [10, 10];
+export const DRAG_GRID_SNAP: [number, number] = [12, 12];
+
 // scale ratio multiple from 1600 x 900
 export const SLIDE_SCALE_RATIO = '0.6';
 export const SLIDE_SCALE_RATIO_STEP = 0.001;
@@ -20,8 +23,6 @@ export const DEFAULT_DIMENSIONS = {
   x: 0,
   y: 0,
 };
-
-export const IMAGE_SETS = [];
 
 export const rndConfig = {
   cancel: '.cancel', // Cancel dragging if target matches selector
@@ -113,3 +114,5 @@ export const RESIZING_ENABLED = {
   topLeft: true,
   topRight: true,
 };
+
+export const IMAGE_SETS = [];

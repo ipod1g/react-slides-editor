@@ -9,7 +9,7 @@ import { useScrollZoom } from '@/components/slideEditor/useScrollZoom';
 import useQuillEditor from '@/components/slideEditor/Quill/useQuillEditor';
 
 import { MdOutlineAdd } from 'react-icons/md';
-import { BottomPanel, TopPanel } from '@/components/slideEditor/panels';
+import { BottomPanel } from '@/components/slideEditor/panels';
 import QuillToolbar from '@/components/slideEditor/Quill/Toolbar';
 import QuillWrapper from '@/components/slideEditor/Quill/QuillWrapper';
 import Slide from '@/components/slideEditor/Slide';
@@ -18,6 +18,7 @@ import {
   MAX_NO_OF_SLIDES,
   SLIDE_SCALE_RATIO_STEP,
 } from '@/components/slideEditor/config';
+import SlideThumbnail from '@/components/slideEditor/SlideThumbnail';
 
 const Editor = () => {
   const { setCurrentSlide, setSlides } = useSlidesActions();
@@ -49,7 +50,7 @@ const Editor = () => {
         ref={quillEditorContainerTempHolder}
       >
         <QuillToolbar quillToolbarContainer={quillToolbarContainer} />
-        <div className="h-full overflow-hidden mx-auto">
+        <div className="h-full w-full overflow-hidden mx-auto">
           <div
             className={`h-full relative flex justify-center items-center`}
             onMouseEnter={activateScrollZoom}
@@ -96,11 +97,11 @@ const Editor = () => {
                 }}
                 exit={{ opacity: 0, transition: { duration: 0.15 } }}
               >
-                {/* <SlideThumbnail
+                <SlideThumbnail
                   key={i}
                   index={i}
                   onClick={() => handleSlideChange(i)}
-                /> */}
+                />
               </Reorder.Item>
             ))}
           </AnimatePresence>

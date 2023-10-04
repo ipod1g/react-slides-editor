@@ -1,4 +1,4 @@
-import { memo, useCallback, useRef } from 'react';
+import { memo, useCallback, useEffect, useRef } from 'react';
 import { AnimatePresence, Reorder } from 'framer-motion';
 import { cn } from '@/lib/utils';
 
@@ -21,7 +21,7 @@ import {
 import SlideThumbnail from '@/components/slideEditor/SlideThumbnail';
 
 const Editor = () => {
-  const { setCurrentSlide, setSlides } = useSlidesActions();
+  const { setCurrentSlide, setSlides, selectItem } = useSlidesActions();
   const currentSlide = useSlidesStore((state) => state.currentSlide);
   const slides = useSlidesStore((state) => state.slides);
 
@@ -38,7 +38,14 @@ const Editor = () => {
     quillToolbarContainer
   );
 
+  useEffect(() => {
+    return () => {
+      selectItem(currentSlide, undefined);
+    };
+  }, []);
+
   const handleSlideChange = useCallback((slideIndex: number) => {
+    selectItem(currentSlide, undefined);
     setCurrentSlide(slideIndex);
   }, []);
 

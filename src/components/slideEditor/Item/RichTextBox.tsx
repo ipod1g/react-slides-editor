@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useCallback, useEffect, useRef } from 'react';
 
 import { TextItem } from '@/components/slideEditor/store';
 import { stripEscapeDoubleQuotes } from '@/components/slideEditor/functions';
@@ -26,6 +26,13 @@ const RichTextBox = ({
   /** Contains the quill editor element when it is active RichTextBox */
   const quillEditorParent = useRef<HTMLDivElement>(null);
 
+  const activate = useCallback(
+    (active: boolean) => {
+      onChangeActive(editable, active);
+    },
+    [onChangeActive, editable]
+  );
+
   /**
    * When prop isActive is true, detach the quill editor element
    * from the temporary container of App, moving it to actual container for it.
@@ -41,7 +48,7 @@ const RichTextBox = ({
     if (isThumbnail) return;
     quillEditorParent.current.style.display = isActive ? 'block' : 'none';
     contentEl.current.style.display = isActive ? 'none' : 'block';
-  }, [quillEditorParent, quillEditorContainer, isActive]);
+  }, [isActive, isThumbnail, quillEditorContainer]);
 
   useEffect(() => {
     if (isActive) {
@@ -54,7 +61,7 @@ const RichTextBox = ({
       document.addEventListener('keyup', onKeyUp);
       return () => document.removeEventListener('keyup', onKeyUp);
     }
-  }, [isActive]);
+  }, [isActive, activate, editable]);
 
   // Set the contents of my contentEl when it changes
   // and for better user mouse hover experience - TODO: doesnt apply on initial addText
@@ -82,10 +89,6 @@ const RichTextBox = ({
       };
     }
   }, [content, isActive]);
-
-  const activate = (active: boolean) => {
-    onChangeActive(editable, active);
-  };
 
   return (
     <div

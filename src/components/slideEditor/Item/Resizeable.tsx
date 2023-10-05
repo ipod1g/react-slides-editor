@@ -8,6 +8,10 @@ import {
 
 import {
   DEFAULT_DIMENSIONS,
+  DRAG_GRID_SNAP,
+  RESIZE_GRID_SNAP,
+  RESIZING_DISABLED,
+  RESIZING_ENABLED,
   SLIDE_SCALE_RATIO,
   rndConfig,
 } from '@/components/slideEditor/config';
@@ -44,58 +48,58 @@ const Resizable = React.memo(
     const prevDraggableData = React.useRef<DraggableData>();
 
     const handleDragStop = useCallback<RndDragCallback>(
-      (e, d) => {
+      (_e, d) => {
+        // No change in d, return early
         if (
           prevDraggableData.current &&
           d.x === prevDraggableData.current.x &&
           d.y === prevDraggableData.current.y
-        ) {
-          return; // No change in d, return early
-        }
-        if (item.type === 'text') {
-          updateItemPosition(currentSlide, 'text', d.node.id, [d.x, d.y]);
-        } else {
-          updateItemPosition(currentSlide, 'image', d.node.id, [d.x, d.y]);
-        }
+        )
+          return;
 
+        updateItemPosition(currentSlide, d.node.id, [d.x, d.y]);
         debouncedRerender();
         prevDraggableData.current = d;
       },
-      [updateItemPosition]
+      [updateItemPosition, debouncedRerender, currentSlide]
     );
 
-    // TODO: introduce generic wrapper for this
     const handleResizeStop = useCallback<RndResizeCallback>(
-      // eslint-disable-next-line @typescript-eslint/no-unused-vars
-      (e, direction, ref, delta, position) => {
+      (_e, _direction, ref) => {
         updateItemSize(currentSlide, ref.id, [
           ref.offsetWidth,
           ref.offsetHeight,
         ]);
         debouncedRerender();
       },
-      [updateItemSize]
+      [updateItemSize, debouncedRerender, currentSlide]
     );
 
     return (
       <Rnd
         key={item?.id}
         scale={isThumbnail ? Number(SLIDE_SCALE_RATIO) : slideScale}
-        // style={{ zIndex: idx }}
+        style={{ zIndex: idx }}
         id={item?.id}
-        disableDragging={isActive}
+        disableDragging={isActive || item.permission === 'view'}
+        enableResizing={
+          item.permission === 'view' ? RESIZING_DISABLED : RESIZING_ENABLED
+        }
+        resizeGrid={RESIZE_GRID_SNAP}
+        dragGrid={DRAG_GRID_SNAP}
         default={{
           width: item.size?.[0] ?? DEFAULT_DIMENSIONS.width,
           height: item.size?.[1] ?? DEFAULT_DIMENSIONS.height,
           x: item.position?.[0] ?? DEFAULT_DIMENSIONS.x,
           y: item.position?.[1] ?? DEFAULT_DIMENSIONS.y,
         }}
-        // onDragStop={handleDragStop}
-        // onResizeStop={handleResizeStop}
-        // onContextMenu={() => {
-        //   selectItem(currentSlide, item.id);
-        // }}
+        onDragStop={handleDragStop}
+        onResizeStop={handleResizeStop}
+        onContextMenu={() => {
+          selectItem(currentSlide, item.id);
+        }}
         onDoubleClick={() => {
+          if (item.permission === 'view') return;
           selectItem(currentSlide, item.id);
         }}
         lockAspectRatio={lockAspectRatio}

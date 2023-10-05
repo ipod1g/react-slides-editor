@@ -8,7 +8,7 @@ interface SlideItem {
   position: [number, number];
   size: [number, number];
   type: 'text' | 'image';
-  permission?: boolean;
+  permission?: 'view' | 'edit';
 }
 export interface TextItem extends SlideItem {
   content: string;

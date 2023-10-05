@@ -42,12 +42,17 @@ const Editor = () => {
     return () => {
       selectItem(currentSlide, undefined);
     };
-  }, []);
+  }, [currentSlide, selectItem]);
 
-  const handleSlideChange = useCallback((slideIndex: number) => {
-    selectItem(currentSlide, undefined);
-    setCurrentSlide(slideIndex);
-  }, []);
+  const handleSlideChange = useCallback(
+    (slideIndex: number) => {
+      selectItem(currentSlide, undefined);
+      setCurrentSlide(slideIndex);
+    },
+    [currentSlide, setCurrentSlide, selectItem]
+  );
+
+  console.log('render - editor');
 
   return (
     <div className="h-full w-full bg-accent-light/80 flex flex-col overflow-hidden">

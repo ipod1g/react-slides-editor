@@ -29,13 +29,13 @@ export interface Slide {
 interface StoreModel {
   slides: Slide[];
   currentSlide: number;
-  selectedItem: TextItem | ImageItem | undefined;
+  selectedItem: TextItem | ImageItem | undefined | null;
   rerenderSlide: 'true' | 'false'; // hack to force rerender - string because of key type
   rerenderThumbnail: 'true' | 'false'; // hack to force rerender - string because of key type
   slideScale: string;
   actions: {
     setSlides: (slideArray: Slide[]) => void;
-    setCurrentSlide: (slide: number) => void;
+    setCurrentSlide: (slideIndex: number) => void;
     updateItemPosition: (
       slideIndex: number,
       itemId: string,
@@ -46,7 +46,6 @@ interface StoreModel {
       itemId: string,
       size: [number, number]
     ) => void;
-    setThumbnail: (slideIndex: number, thumbnailUrl: string) => void;
     updateText: (
       slideIndex: number,
       newValue: string | number | boolean | 'normal' | 'bold'
@@ -62,7 +61,7 @@ interface StoreModel {
     ) => void;
 
     forceRerender: (target: 'rerenderSlide' | 'rerenderThumbnail') => void;
-    addSlide: (template?: unknown[]) => void;
+    addSlide: (template?: [ImageItem | TextItem]) => void;
     deleteSlide: (slideIndex: number) => void;
     changeScale: (scale: string) => void;
   };
@@ -79,17 +78,17 @@ const useSlidesStore = createWithEqualityFn<StoreModel>()(
         rerenderSlide: 'false',
         slideScale: '0.6',
         actions: {
-          setSlides: (slideArray: Slide[]) => {
+          setSlides: (slideArray) => {
             set(
               produce((state) => {
                 state.slides = slideArray;
               })
             );
           },
-          setCurrentSlide: (slide) => {
+          setCurrentSlide: (slideIndex) => {
             set(
               produce((state) => {
-                state.currentSlide = slide;
+                state.currentSlide = slideIndex;
               })
             );
           },
@@ -117,22 +116,18 @@ const useSlidesStore = createWithEqualityFn<StoreModel>()(
                 }
               })
             ),
-          setThumbnail: (slideIndex, thumbnailUrl) =>
-            set(
-              produce((state) => {
-                state.slides[slideIndex].thumbnailUrl = thumbnailUrl;
-              })
-            ),
           updateText: (slideIndex, newValue) =>
             set(
               produce((state) => {
                 const slide = state.slides[slideIndex];
                 if (state.selectedItem) {
                   const itemIndex = slide.items.findIndex(
-                    (obj: ImageItem | TextItem) =>
-                      obj.id === state.selectedItem.id
+                    (obj: ImageItem | TextItem) => {
+                      obj.id === state.selectedItem!.id;
+                    }
                   );
-                  state.slides[slideIndex].items[itemIndex].content = newValue;
+                  const textItem = slide.items[itemIndex];
+                  textItem.content = newValue;
                 }
               })
             ),
@@ -154,7 +149,7 @@ const useSlidesStore = createWithEqualityFn<StoreModel>()(
             set(
               produce((state) => {
                 const slide = state.slides[slideIndex];
-                const newItem = {
+                const newItem: ImageItem = {
                   id: Math.random().toString(36).substr(2, 9),
                   position: [10, 10],
                   size: [400, 400],
@@ -164,16 +159,16 @@ const useSlidesStore = createWithEqualityFn<StoreModel>()(
                 slide.items = [...slide.items, newItem];
               })
             ),
-          addText: (slideIndex, text) =>
+          addText: (slideIndex, newText = '"Enter text"') =>
             set(
               produce((state) => {
                 const slide = state.slides[slideIndex];
-                const newItem = {
+                const newItem: TextItem = {
                   id: Math.random().toString(36).substr(2, 9),
                   position: [50, 50],
                   size: [200, 200],
                   type: 'text',
-                  content: '"Enter text"',
+                  content: newText,
                 };
                 slide.items = [...slide.items, newItem];
               })
@@ -212,7 +207,7 @@ const useSlidesStore = createWithEqualityFn<StoreModel>()(
                 }
               })
             ),
-          forceRerender: (target) =>
+          forceRerender: (target: 'rerenderSlide' | 'rerenderThumbnail') =>
             set({
               [target]: get()[target] === 'true' ? 'false' : 'true',
             }),
@@ -222,9 +217,9 @@ const useSlidesStore = createWithEqualityFn<StoreModel>()(
                 state.slides = [
                   ...state.slides,
                   {
+                    // _id: Math.random().toString(),
                     id: Math.random(),
                     items: template ?? [],
-                    thumbnailUrl: '',
                   },
                 ];
               })
@@ -233,7 +228,7 @@ const useSlidesStore = createWithEqualityFn<StoreModel>()(
             set(
               produce((state) => {
                 state.slides = state.slides.filter(
-                  (slide: Slide, index: number) => index !== slideIndex
+                  (_: Slide, index: number) => index !== slideIndex
                 );
               })
             ),
@@ -244,7 +239,8 @@ const useSlidesStore = createWithEqualityFn<StoreModel>()(
         name: 'slides-storage',
         version: 1,
         storage: createJSONStorage(() => sessionStorage),
-        partialize: ({ actions, ...rest }: any) => rest,
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
+        partialize: ({ actions, ...rest }: StoreModel) => rest,
       }
     )
   ),

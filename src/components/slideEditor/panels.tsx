@@ -1,9 +1,7 @@
 import { FormEvent, useRef, useState } from 'react';
 import { cn } from '@/lib/utils';
 
-import useSlidesStore, {
-  useSlidesActions,
-} from '@/components/slideEditor/store';
+import { useSlidesActions } from '@/components/slideEditor/store';
 
 import {
   Dialog,
@@ -18,7 +16,7 @@ import * as DialogPrimitive from '@radix-ui/react-dialog';
 
 export const TopPanel = () => {
   const timeRef = useRef<string>();
-  const { setSlides, forceRerender } = useSlidesActions();
+  const { forceRerender } = useSlidesActions();
 
   function addTemplate() {
     // setSlides(template);
@@ -42,8 +40,6 @@ export const TopPanel = () => {
 };
 
 export const BottomPanel = ({ children }: { children: React.ReactNode }) => {
-  const { setCurrentSlide } = useSlidesActions();
-
   const [open, setOpen] = useState(false);
   const [isPdfProcessing, setIsPdfProcessing] = useState(false);
 

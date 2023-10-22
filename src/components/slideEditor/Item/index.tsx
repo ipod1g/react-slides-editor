@@ -21,7 +21,7 @@ const Item = React.memo(
       activate: boolean
     ) => void;
     quillEditorContainer?: React.RefObject<HTMLDivElement>;
-    selectedItem?: TextItem | ImageItem | undefined;
+    selectedItem?: TextItem | ImageItem | undefined | null;
     isThumbnail?: boolean;
   }) => {
     return (

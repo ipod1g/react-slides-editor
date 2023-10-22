@@ -2,7 +2,6 @@ import * as React from 'react';
 import * as DialogPrimitive from '@radix-ui/react-dialog';
 
 import { cn } from '@/lib/utils';
-import CloseButton from '../shared/button/CloseButton';
 import { IoClose } from 'react-icons/io5';
 
 const Dialog = DialogPrimitive.Root;

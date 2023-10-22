@@ -67,7 +67,7 @@ const Slide = React.memo(
         };
       }
       return () => {};
-    }, [quillInstance, selectedItem, updateText]);
+    }, [currentSlideIndex, quillInstance, selectedItem, updateText]);
 
     const setEditableActiveStatus = useCallback(
       (editable: TextItem | undefined, activate: boolean) => {

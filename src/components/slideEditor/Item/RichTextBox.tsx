@@ -6,7 +6,7 @@ import { stripEscapeDoubleQuotes } from '@/components/slideEditor/functions';
 type RichTextBox = {
   editable: TextItem | undefined;
   quillEditorContainer: React.RefObject<HTMLDivElement>;
-  onChangeActive: (editable: TextItem | undefined, active: boolean) => void;
+  onChangeActive: (editable: TextItem | undefined, activate: boolean) => void;
   isActive: boolean;
   isThumbnail?: boolean;
 };

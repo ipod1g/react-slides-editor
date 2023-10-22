@@ -16,13 +16,17 @@ const Item = React.memo(
   }: {
     item: TextItem | ImageItem;
     idx: number;
-    setEditableActiveStatus: any;
-    quillEditorContainer: any;
-    selectedItem: any;
+    setEditableActiveStatus?: (
+      editable: TextItem | undefined,
+      activate: boolean
+    ) => void;
+    quillEditorContainer?: React.RefObject<HTMLDivElement>;
+    selectedItem?: TextItem | ImageItem | undefined;
     isThumbnail?: boolean;
   }) => {
     return (
       <React.Fragment key={'item-' + item.id}>
+        {/* TODO: make type text infer the existence of quillEditorContainer and setEditableActiveStatus */}
         {item.type === 'text' ? (
           <Resizeable
             item={item}
@@ -32,13 +36,15 @@ const Item = React.memo(
           >
             <ContextMenuWrapper>
               {item.permission !== 'view' && <ItemControl itemId={item.id} />}
-              <RichTextBox
-                isThumbnail={isThumbnail}
-                editable={item}
-                onChangeActive={setEditableActiveStatus}
-                quillEditorContainer={quillEditorContainer}
-                isActive={selectedItem?.id === item.id}
-              />
+              {quillEditorContainer && setEditableActiveStatus && (
+                <RichTextBox
+                  isThumbnail={isThumbnail}
+                  editable={item}
+                  onChangeActive={setEditableActiveStatus}
+                  quillEditorContainer={quillEditorContainer}
+                  isActive={selectedItem?.id === item.id}
+                />
+              )}
             </ContextMenuWrapper>
           </Resizeable>
         ) : (

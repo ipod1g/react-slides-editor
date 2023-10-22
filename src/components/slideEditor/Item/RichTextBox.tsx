@@ -70,7 +70,8 @@ const RichTextBox = ({
       try {
         contentEl.current.innerHTML = stripEscapeDoubleQuotes(
           JSON.parse(content)
-        ).toString(); // might not need toString
+        ).toString();
+        // might not need toString
       } catch (err) {
         console.error(err);
       }

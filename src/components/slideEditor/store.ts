@@ -120,12 +120,10 @@ const useSlidesStore = createWithEqualityFn<StoreModel>()(
             set(
               produce((state) => {
                 const slide = state.slides[slideIndex];
-                if (state.selectedItem) {
-                  const itemIndex = slide.items.findIndex(
-                    (obj: ImageItem | TextItem) => {
-                      obj.id === state.selectedItem!.id;
-                    }
-                  );
+                if (state.selectedItem && state.selectedItem.type === 'text') {
+                  const itemIndex = slide.items.findIndex((obj: TextItem) => {
+                    return obj.id === state.selectedItem.id;
+                  });
                   const textItem = slide.items[itemIndex];
                   textItem.content = newValue;
                 }
@@ -159,7 +157,7 @@ const useSlidesStore = createWithEqualityFn<StoreModel>()(
                 slide.items = [...slide.items, newItem];
               })
             ),
-          addText: (slideIndex, newText = '"Enter text"') =>
+          addText: (slideIndex, newText = 'Enter text') =>
             set(
               produce((state) => {
                 const slide = state.slides[slideIndex];
@@ -168,7 +166,7 @@ const useSlidesStore = createWithEqualityFn<StoreModel>()(
                   position: [50, 50],
                   size: [200, 200],
                   type: 'text',
-                  content: newText,
+                  content: JSON.stringify(newText),
                 };
                 slide.items = [...slide.items, newItem];
               })

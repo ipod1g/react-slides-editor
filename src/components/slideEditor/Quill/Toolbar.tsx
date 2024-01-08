@@ -74,7 +74,7 @@ const QuillToolbar = ({
             <button className="ql-direction" value="rtl"></button>
             <select className="ql-align"></select>
           </span>
-          <span className="ql-formats bg-gradient-blue px-4 py-1 -my-1 rounded-xl">
+          <span className="ql-formats bg-black px-4 py-1 -my-1 rounded-lg">
             <TooltipProvider delayDuration={200}>
               <Tooltip>
                 <TooltipTrigger asChild>
@@ -82,7 +82,7 @@ const QuillToolbar = ({
                     onClick={() => {
                       addText(currentSlide, 'Enter Text');
                     }}
-                    className="hover:bg-accent-light/50 text-accent-dark mr-3"
+                    className="text-white w-24 flex-shrink-0 mr-3"
                   >
                     <MdTextIncrease size={24} />
                   </button>
@@ -97,7 +97,7 @@ const QuillToolbar = ({
               <TooltipProvider delayDuration={200}>
                 <Tooltip>
                   <TooltipTrigger asChild>
-                    <PopoverTrigger className="hover:bg-accent-light/50 text-accent-dark">
+                    <PopoverTrigger className="text-primary-white">
                       <FaRegImage size={20} />
                     </PopoverTrigger>
                   </TooltipTrigger>
@@ -111,7 +111,10 @@ const QuillToolbar = ({
                 sideOffset={-2}
                 variant={null}
               >
-                <div className="flex items-center flex-col max-h-[400px] overflow-y-auto gap-1 py-4">
+                <div className="grid grid-cols-2 items-center flex-col max-h-[400px] overflow-y-auto gap-1 py-4">
+                  <h4 className="text-neutral-500 col-span-2 mb-4">
+                    Image upload disabled <br /> due to storage usage
+                  </h4>
                   {IMAGE_SETS.map((imageURL) => {
                     return (
                       <button

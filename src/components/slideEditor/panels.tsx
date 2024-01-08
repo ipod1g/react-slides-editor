@@ -1,6 +1,4 @@
-import { FormEvent, useRef, useState } from 'react';
-import { cn } from '@/lib/utils';
-
+import { FormEvent, useState } from 'react';
 import { useSlidesActions } from '@/components/slideEditor/store';
 
 import {
@@ -13,40 +11,17 @@ import {
   DialogFooter,
 } from '@/components/ui/dialog';
 import * as DialogPrimitive from '@radix-ui/react-dialog';
-
-export const TopPanel = () => {
-  const timeRef = useRef<string>();
-  const { forceRerender } = useSlidesActions();
-
-  function addTemplate() {
-    // setSlides(template);
-    forceRerender('rerenderSlide');
-  }
-
-  return (
-    <div className="bg-gradient-blue h-10 flex-shrink-0 w-full flex justify-between items-center text-white px-8">
-      <h1>
-        <span className="font-bold">Untitled design</span> - Presentation Draft
-      </h1>
-      <h3 className="text-sm text-white/70">Auto saved {timeRef.current}</h3>
-      <button
-        onClick={() => addTemplate()}
-        className="border-2 border-accent-mid px-3 py-1 rounded-2xl bg-purple-200 font-bold text-black"
-      >
-        Reset back to template
-      </button>
-    </div>
-  );
-};
+import { INITIAL_SLIDE } from './initial';
 
 export const BottomPanel = ({ children }: { children: React.ReactNode }) => {
   const [open, setOpen] = useState(false);
-  const [isPdfProcessing, setIsPdfProcessing] = useState(false);
+  const { setSlides } = useSlidesActions();
 
-  const downloadPdf = async (e: FormEvent) => {
+  const resetSlides = async (e: FormEvent) => {
     e.preventDefault();
     setOpen(false);
-    setIsPdfProcessing(true);
+    // setSlides(Array(0));
+    setSlides([INITIAL_SLIDE]);
   };
 
   return (
@@ -55,11 +30,8 @@ export const BottomPanel = ({ children }: { children: React.ReactNode }) => {
       <div className="w-[164px] px-2 border-l-2 h-full flex flex-shrink-0">
         <Dialog open={open} onOpenChange={setOpen}>
           <DialogTrigger asChild>
-            <button
-              className="mx-auto hover:cursor-pointer w-36 h-10 mt-3 font-bold relative mr-12"
-              disabled={isPdfProcessing}
-            >
-              Submit
+            <button className="bg-neutral-950 text-white rounded-full mx-auto hover:cursor-pointer w-36 h-12 relative my-auto">
+              Reset All
             </button>
           </DialogTrigger>
           {/* change to loading after confirm */}
@@ -69,40 +41,19 @@ export const BottomPanel = ({ children }: { children: React.ReactNode }) => {
                 Are you absolutely sure?
               </DialogTitle>
               <DialogDescription className="text-accent-dark">
-                You cannot edit the proposal after submitting
+                You cannot retrieve your previous slides
               </DialogDescription>
             </DialogHeader>
             <DialogFooter>
-              <DialogPrimitive.Close
-                disabled={isPdfProcessing}
-                className="border-2 border-purple-950 px-6 py-2 rounded-full"
-              >
+              <DialogPrimitive.Close className="border-2 border-neutral-950 px-6 py-2 rounded-full">
                 <span className="">Close</span>
               </DialogPrimitive.Close>
               <button
-                onClick={downloadPdf}
+                onClick={resetSlides}
                 type="submit"
-                disabled={isPdfProcessing}
-                className="bg-purple-950 px-6 py-2 text-white rounded-full relative disabled:opacity-90"
+                className="bg-neutral-950 px-6 py-2 text-white rounded-full relative"
               >
-                <div
-                  className={cn(
-                    'invisible absolute left-1/2 -translate-x-1/2 mt-1',
-                    {
-                      visible: isPdfProcessing,
-                    }
-                  )}
-                >
-                  Submitting
-                  {/* <BlobUp /> */}
-                </div>
-                <span
-                  className={cn('visible', {
-                    invisible: isPdfProcessing,
-                  })}
-                >
-                  Confirm
-                </span>
+                Confirm
               </button>
             </DialogFooter>
           </DialogContent>

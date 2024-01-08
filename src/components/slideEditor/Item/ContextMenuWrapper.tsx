@@ -4,7 +4,7 @@ import {
   ContextMenuItem,
   ContextMenuLabel,
   ContextMenuSeparator,
-  ContextMenuShortcut,
+  // ContextMenuShortcut,
   ContextMenuTrigger,
 } from '@/components/ui/context-menu';
 
@@ -22,7 +22,6 @@ export function ContextMenuWrapper({
   const { deleteItem, changeZIndex } = useSlidesActions();
 
   //TODO: add keyboard shortcuts
-
   return (
     <ContextMenu>
       <ContextMenuTrigger>{children}</ContextMenuTrigger>
@@ -36,7 +35,7 @@ export function ContextMenuWrapper({
           }}
         >
           Move to Back
-          <ContextMenuShortcut>&#91;</ContextMenuShortcut>
+          {/* <ContextMenuShortcut>&#91;</ContextMenuShortcut> */}
         </ContextMenuItem>
         <ContextMenuItem
           inset
@@ -46,12 +45,12 @@ export function ContextMenuWrapper({
           }}
         >
           Move to Front
-          <ContextMenuShortcut>&#93;</ContextMenuShortcut>
+          {/* <ContextMenuShortcut>&#93;</ContextMenuShortcut> */}
         </ContextMenuItem>
         <ContextMenuSeparator />
         <ContextMenuItem inset onClick={() => deleteItem(currentSlide)}>
           Delete
-          <ContextMenuShortcut>Del</ContextMenuShortcut>
+          {/* <ContextMenuShortcut>Del</ContextMenuShortcut> */}
         </ContextMenuItem>
       </ContextMenuContent>
     </ContextMenu>

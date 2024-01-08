@@ -1,7 +1,8 @@
 import { produce } from 'immer';
-import { createJSONStorage, devtools, persist } from 'zustand/middleware';
+import { devtools, persist } from 'zustand/middleware';
 import { createWithEqualityFn } from 'zustand/traditional';
 import { shallow } from 'zustand/shallow';
+import { INITIAL_SLIDE } from './initial';
 
 interface SlideItem {
   id: string;
@@ -22,7 +23,6 @@ export interface ImageItem extends SlideItem {
 }
 export interface Slide {
   id: number; // order?
-  _id: string;
   items: (TextItem | ImageItem)[];
 }
 
@@ -71,7 +71,7 @@ const useSlidesStore = createWithEqualityFn<StoreModel>()(
   devtools(
     persist(
       (set, get) => ({
-        slides: [],
+        slides: [INITIAL_SLIDE],
         currentSlide: 0,
         selectedItem: undefined,
         rerenderThumbnail: 'false',
@@ -236,7 +236,7 @@ const useSlidesStore = createWithEqualityFn<StoreModel>()(
       {
         name: 'slides-storage',
         version: 1,
-        storage: createJSONStorage(() => sessionStorage),
+        // storage: createJSONStorage(() => sessionStorage),
         // eslint-disable-next-line @typescript-eslint/no-unused-vars
         partialize: ({ actions, ...rest }: StoreModel) => rest,
       }

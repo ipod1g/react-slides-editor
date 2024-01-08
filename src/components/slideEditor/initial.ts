@@ -12,7 +12,7 @@ export const INITIAL_SLIDE: Slide = {
     },
     {
       id: 'll45k71o3',
-      position: [416.00000152587893, 121.99997978210449],
+      position: [176.00000152587893, 97.99997978210448],
       size: [690, 400],
       type: 'text',
       content:
@@ -20,7 +20,7 @@ export const INITIAL_SLIDE: Slide = {
     },
     {
       id: 'nxdcpsve4',
-      position: [332, 548.0000114440918],
+      position: [236, 500.0000114440918],
       size: [250, 240],
       type: 'text',
       content:
@@ -28,15 +28,15 @@ export const INITIAL_SLIDE: Slide = {
     },
     {
       id: 'wgjfnkfni',
-      position: [578, 680.0000114440918],
-      size: [320, 160],
+      position: [538.0000396728516, 660.0000152587891],
+      size: [320, 180],
       type: 'text',
       content:
-        '"<p class=\\\\\\"ql-align-center\\\\\\"><span style=\\\\\\"background-color: rgb(250, 204, 204);\\\\\\">Creative Developer Wannabe</span></p><p class=\\\\\\"ql-align-center\\\\\\"><span style=\\\\\\"background-color: rgb(250, 204, 204);\\\\\\">Please hire me</span></p>"',
+        '"<p class=\\\\\\"ql-align-center\\\\\\"><span style=\\\\\\"background-color: rgb(250, 204, 204);\\\\\\">Prospective</span></p><p class=\\\\\\"ql-align-center\\\\\\"><span style=\\\\\\"background-color: rgb(250, 204, 204);\\\\\\">Creative Developer </span></p><p class=\\\\\\"ql-align-center\\\\\\"><span style=\\\\\\"background-color: rgb(250, 204, 204);\\\\\\">﻿</span></p><p class=\\\\\\"ql-align-center\\\\\\"><strong style=\\\\\\"color: rgb(107, 36, 178); background-color: rgb(250, 204, 204);\\\\\\">Please hire me</strong></p>"',
     },
     {
       id: '3ha1l8a4e',
-      position: [608, 506.0000114440918],
+      position: [728, 338.0000114440918],
       size: [460, 100],
       type: 'text',
       content:

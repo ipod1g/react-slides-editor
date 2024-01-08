@@ -119,4 +119,5 @@ export const IMAGE_SETS = [
   'https://img.freepik.com/premium-photo/colorful-oil-paint-strokes-generative-ai-illustrator_438099-25037.jpg',
   'https://pngimg.com/uploads/tree/tree_PNG92741.png',
   'https://www.google.com/images/branding/googlelogo/1x/googlelogo_color_272x92dp.png',
+  'https://upload.wikimedia.org/wikipedia/commons/thumb/b/b7/Nizza-C%C3%B4te_d%27Azur.jpg/800px-Nizza-C%C3%B4te_d%27Azur.jpg',
 ];

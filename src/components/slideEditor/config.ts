@@ -115,4 +115,8 @@ export const RESIZING_ENABLED = {
   topRight: true,
 };
 
-export const IMAGE_SETS = [];
+export const IMAGE_SETS = [
+  'https://img.freepik.com/premium-photo/colorful-oil-paint-strokes-generative-ai-illustrator_438099-25037.jpg',
+  'https://pngimg.com/uploads/tree/tree_PNG92741.png',
+  'https://www.google.com/images/branding/googlelogo/1x/googlelogo_color_272x92dp.png',
+];

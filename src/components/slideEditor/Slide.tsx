@@ -76,8 +76,8 @@ const Slide = React.memo(
 
         if (activate && quill && editable?.content) {
           const content = stripEscapeDoubleQuotes(JSON.parse(editable.content));
-          // @ts-expect-error quill typings on content
-          const delta = quill.clipboard.convert(content);
+          if (typeof content !== 'string') return;
+          const delta = quill.clipboard.convert({ html: content });
           quill.setContents(delta, 'silent');
 
           setTimeout(() => {
@@ -96,7 +96,7 @@ const Slide = React.memo(
           selectItem(currentSlideIndex, undefined);
         }
       },
-      []
+      [currentSlideIndex, quillEditorContainer, quillEditorContainerTempHolder, quillInstance, selectItem]
     );
 
     // TODO: find a way to get scale from screensize when adding responsiveness

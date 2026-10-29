@@ -142,7 +142,7 @@ const AddSlide = memo(
     const handleAddSlide = useCallback(() => {
       addSlide();
       setCurrentSlide(slideLength);
-    }, [slideLength]);
+    }, [addSlide, setCurrentSlide, slideLength]);
 
     return (
       <>

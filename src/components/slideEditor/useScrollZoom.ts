@@ -24,7 +24,7 @@ export const useScrollZoom = (modifier: number = 0.01) => {
       );
       changeScale(newScale.toString());
     },
-    [slideScale]
+    [slideScale, changeScale, modifier]
   );
 
   useEffect(() => {

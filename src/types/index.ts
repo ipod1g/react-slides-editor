@@ -1,15 +1,3 @@
-import Quill, {
-  // QuillOptionsStatic,
-  ClipboardStatic,
-  History,
-  KeyboardStatic,
-} from 'quill';
+import type Quill from 'quill';
 
-export interface QuillInstance extends Quill {
-  clipboard: ClipboardStatic;
-  container: Element & { innerHTML: string };
-  // options: QuillOptionsStatic;
-  root: HTMLDivElement;
-  keyboard: KeyboardStatic;
-  history: History;
-}
+export type QuillInstance = Quill;
